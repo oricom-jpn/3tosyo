@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>視察案内 | さんとしょ</title>
+<meta name="description" content="さんとしょ・一般社団法人オリコムへの視察のご案内。事業説明のお申し込みはこちらから。">
+<meta property="og:title" content="視察案内 | さんとしょ">
+<meta property="og:description" content="さんとしょ・一般社団法人オリコムの取り組みについて、視察を受け付けています。">
+<meta property="og:image" content="https://3tosyo.ori-com.jp/images/santosyo.jpg">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">さんとしょ <span class="tag">さんわにあるみんなのとしょかん</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">ホーム</a></li>
+      <li><a href="owner.html">一箱本棚オーナー制度</a></li>
+      <li><a href="selectbooks.html">セレクトブックス</a></li>
+      <li><a href="visit.html" aria-current="page">視察案内</a></li>
+    </ul>
+    <button class="ham" id="hamBtn" aria-label="メニューを開く"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="index.html">ホーム</a>
+    <a href="owner.html">一箱本棚オーナー制度</a>
+    <a href="selectbooks.html">セレクトブックス</a>
+    <a href="visit.html">視察案内</a>
+  </nav>
+
+<main>
+
+  <section class="hero" style="padding-bottom:2rem;">
+    <div class="wrap">
+      <div class="shelf-strip" style="max-width:280px;">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <span class="hero-tag">Visit</span>
+      <h1>さんとしょの取り組みを、<br><span class="accent">見に来てください。</span></h1>
+      <p class="lead">さんとしょ・一般社団法人オリコムの活動にご関心をお持ちの方向けに、視察を受け付けています。1時間程度、事業説明と質疑応答をさせていただきます。</p>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="two-col">
+        <div>
+          <p class="section-label">Fee</p>
+          <h2 class="section-title">視察について</h2>
+          <div class="price-box">
+            <div class="amount">9,000<span style="font-size:1rem;">円</span></div>
+            <div class="unit">/ 3名まで（以降1名ごとに +3,000円）</div>
+          </div>
+        </div>
+        <div>
+          <p class="section-label">Contact</p>
+          <h2 class="section-title">お申し込み</h2>
+          <div class="section-body" style="margin-bottom:1.6rem;">
+            <p>視察をご希望の方は、お問い合わせフォームよりご連絡ください。日程や当日の流れについてご案内します。</p>
+          </div>
+          <a class="btn-primary" href="https://forms.gle/2fWpQnDXAQ5Btg9T9" target="_blank" rel="noopener">お問い合わせフォームへ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">さんとしょ</div>
+        <p>さんわにあるみんなのとしょかん<br>兵庫県尼崎市建家町114-1（三和本通商店街7丁目）</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">ホーム</a>
+        <a href="owner.html">一箱本棚オーナー制度</a>
+        <a href="selectbooks.html">セレクトブックス</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 一般社団法人オリコム</span>
+      <a href="https://ori-com.jp/" target="_blank" rel="noopener">
+        <img src="images/orikomu_logo.svg" alt=""> ori-com.jp
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const hamBtn = document.getElementById('hamBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>さんとしょセレクトブックス | さんとしょ</title>
+<meta name="description" content="さんとしょ内にある新刊書店「さんとしょセレクトブックス」。一箱本棚オーナー厳選の新刊書籍を販売しています。">
+<meta property="og:title" content="さんとしょセレクトブックス | さんとしょ">
+<meta property="og:description" content="一箱本棚オーナー厳選の新刊書籍を販売する、さんとしょ内の小さな本屋。">
+<meta property="og:image" content="https://3tosyo.ori-com.jp/images/santosyo.jpg">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">さんとしょ <span class="tag">さんわにあるみんなのとしょかん</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">ホーム</a></li>
+      <li><a href="owner.html">一箱本棚オーナー制度</a></li>
+      <li><a href="selectbooks.html" aria-current="page">セレクトブックス</a></li>
+      <li><a href="visit.html">視察案内</a></li>
+    </ul>
+    <button class="ham" id="hamBtn" aria-label="メニューを開く"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="index.html">ホーム</a>
+    <a href="owner.html">一箱本棚オーナー制度</a>
+    <a href="selectbooks.html">セレクトブックス</a>
+    <a href="visit.html">視察案内</a>
+  </nav>
+
+<main>
+
+  <section class="hero" style="padding-bottom:2rem;">
+    <div class="wrap">
+      <div class="shelf-strip" style="max-width:280px;">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <span class="hero-tag">2026年1月 OPEN</span>
+      <h1>誰かの“推し”が、<br>あなたの<span class="accent">“お気に入り”</span>に。</h1>
+      <p class="lead">尼崎・三和本通商店街にある「小さな本屋」。さんとしょ内で、一箱本棚オーナー厳選の新刊書籍を販売しています。借りるだけでなく「買う」ことでも、本との出会いを届けます。</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="https://www.instagram.com/3tosyo_selectbooks/" target="_blank" rel="noopener">Instagramを見る</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <p class="section-label">Shop Info</p>
+      <h2 class="section-title">店舗情報</h2>
+      <dl class="info-list">
+        <li><dt>住所</dt><dd>さんとしょ内（兵庫県尼崎市建家町114-1）</dd></li>
+        <li><dt>営業日</dt><dd>不定期のため、Instagramでご確認ください</dd></li>
+        <li><dt>支払方法</dt><dd>完全キャッシュレス（各種クレジットカード、QRコード決済、電子マネー、あま咲きコインがご利用いただけます）</dd></li>
+      </dl>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">さんとしょ</div>
+        <p>さんわにあるみんなのとしょかん<br>兵庫県尼崎市建家町114-1（三和本通商店街7丁目）</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">ホーム</a>
+        <a href="owner.html">一箱本棚オーナー制度</a>
+        <a href="visit.html">視察案内</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 一般社団法人オリコム</span>
+      <a href="https://ori-com.jp/" target="_blank" rel="noopener">
+        <img src="images/orikomu_logo.svg" alt=""> ori-com.jp
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const hamBtn = document.getElementById('hamBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+</script>
+
+</body>
+</html>
