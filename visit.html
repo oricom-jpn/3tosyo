@@ -39,33 +39,57 @@
 
   <section class="hero" style="padding-bottom:2rem;">
     <div class="wrap">
-      <div class="shelf-strip" style="max-width:280px;">
-        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      <div class="hero-grid">
+        <div>
+          <div class="shelf-strip" style="max-width:280px;">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <span class="hero-tag">Visit</span>
+          <h1>さんとしょの取り組みを、<br><span class="accent">見に来てください。</span></h1>
+          <p class="lead">さんとしょ・一般社団法人オリコムの活動にご関心をお持ちの方向けに、視察を受け付けています。1時間程度、事業説明と質疑応答をさせていただきます。</p>
+        </div>
+        <div class="hero-photo">
+          <img src="images/visit.jpg" alt="視察の様子">
+        </div>
       </div>
-      <span class="hero-tag">Visit</span>
-      <h1>さんとしょの取り組みを、<br><span class="accent">見に来てください。</span></h1>
-      <p class="lead">さんとしょ・一般社団法人オリコムの活動にご関心をお持ちの方向けに、視察を受け付けています。1時間程度、事業説明と質疑応答をさせていただきます。</p>
     </div>
   </section>
 
   <section class="alt">
     <div class="wrap">
-      <div class="two-col">
+      <div class="two-col reveal">
         <div>
           <p class="section-label">Fee</p>
-          <h2 class="section-title">視察について</h2>
-          <div class="price-box">
+          <h2 class="section-title reveal">視察について</h2>
+          <div class="price-box reveal">
             <div class="amount">9,000<span style="font-size:1rem;">円</span></div>
             <div class="unit">/ 3名まで（以降1名ごとに +3,000円）</div>
           </div>
         </div>
         <div>
           <p class="section-label">Contact</p>
-          <h2 class="section-title">お申し込み</h2>
-          <div class="section-body" style="margin-bottom:1.6rem;">
-            <p>視察をご希望の方は、お問い合わせフォームよりご連絡ください。日程や当日の流れについてご案内します。</p>
+          <h2 class="section-title reveal">お申し込み</h2>
+          <div class="section-body reveal" style="margin-bottom:1.6rem;">
+            <p>視察をご希望の方は、下記の決済リンクからお申し込みください。お支払い確認後、日程調整のご連絡をいたします。</p>
           </div>
-          <a class="btn-primary" href="https://forms.gle/2fWpQnDXAQ5Btg9T9" target="_blank" rel="noopener">お問い合わせフォームへ</a>
+          <a class="btn-primary" href="https://square.link/u/ogijJ4DU" target="_blank" rel="noopener">視察を申し込む（お支払いへ）</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="section-label">Before You Visit</p>
+      <h2 class="section-title reveal">視察の前に読んでおくと理解が深まる記事</h2>
+      <div class="card reveal" style="max-width:520px;">
+        <div class="card-top" style="background:var(--green);"></div>
+        <div class="card-body">
+          <h3 class="card-title">オリコムの取り組みを深掘りしたnote記事</h3>
+          <p class="card-text">さんとしょ・一般社団法人オリコムの活動背景について、より詳しく解説した有料記事です。視察の前にお読みいただくと、当日の理解がより深まります。</p>
+          <div style="margin-top:1.2rem;">
+            <a class="btn-outline" href="https://note.com/oricom/n/n3cae0aeb1899" target="_blank" rel="noopener">note記事を読む</a>
+          </div>
         </div>
       </div>
     </div>
@@ -78,7 +102,7 @@
     <div class="footer-top">
       <div>
         <div class="footer-brand">さんとしょ</div>
-        <p>さんわにあるみんなのとしょかん<br>兵庫県尼崎市建家町114-1（三和本通商店街7丁目）</p>
+        <p>さんわにあるみんなのとしょかん<br><a href="https://maps.app.goo.gl/mhg2My3oF3n4jtTj6" target="_blank" rel="noopener">兵庫県尼崎市建家町114-1（三和本通商店街7丁目）</a></p>
       </div>
       <div class="footer-links">
         <a href="index.html">ホーム</a>
@@ -100,6 +124,17 @@
   const mobileMenu = document.getElementById('mobileMenu');
   hamBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
   mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+  // スクロールで軽くフェードインするアニメーション
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 </script>
 
 </body>

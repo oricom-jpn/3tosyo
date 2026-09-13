@@ -7,6 +7,7 @@
   --orange: #E8703A;
   --green:  #7DC242;
   --blue:   #5BB8F5;
+  --yellow: #FBCF29;
   --dark:   #1a1a1a;
   --mid:    #666;
   --light:  #f5f2ed;
@@ -192,11 +193,33 @@ header.site-nav {
 .btn-outline:hover { background: var(--dark); color: #fff; }
 
 .hero-photo {
+  position: relative;
   border-radius: 10px;
   overflow: hidden;
   aspect-ratio: 4 / 3;
+  background: var(--dark);
 }
-.hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+.hero-photo > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-photo .slideshow { position: absolute; inset: 0; }
+.hero-photo .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1s ease; }
+.hero-photo .slide.active { opacity: 1; }
+.hero-photo .slide img { width: 100%; height: 100%; object-fit: cover; }
+.hero-photo .slide-dots {
+  position: absolute;
+  bottom: 1rem; right: 1rem;
+  display: flex; gap: 7px;
+  z-index: 2;
+}
+.hero-photo .slide-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.45);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+.hero-photo .slide-dot.active { background: #fff; transform: scale(1.25); }
 
 @media (max-width: 760px) {
   .hero-grid { grid-template-columns: 1fr; }
@@ -211,9 +234,10 @@ header.site-nav {
   margin: 0 0 1.6rem;
 }
 .shelf-strip span { flex: 1; border-radius: 2px 2px 0 0; }
-.shelf-strip span:nth-child(3n+1) { background: var(--orange); }
-.shelf-strip span:nth-child(3n+2) { background: var(--green); }
-.shelf-strip span:nth-child(3n)   { background: var(--blue); }
+.shelf-strip span:nth-child(4n+1) { background: var(--orange); }
+.shelf-strip span:nth-child(4n+2) { background: var(--yellow); }
+.shelf-strip span:nth-child(4n+3) { background: var(--green); }
+.shelf-strip span:nth-child(4n)   { background: var(--blue); }
 
 /* ---------- Sections ---------- */
 section { padding: 5rem 0; }
@@ -283,20 +307,65 @@ section.alt { background: var(--white); }
 .card-orange .card-top { background: var(--orange); }
 .card-green  .card-top { background: var(--green); }
 .card-blue   .card-top { background: var(--blue); }
-.card-body { padding: 1.6rem; }
+.card-body { padding: 1.9rem; }
 .card-title { font-family: var(--serif); font-size: 1.02rem; font-weight: 600; margin: 0 0 0.5rem; }
 .card-text { font-size: 0.86rem; color: var(--mid); line-height: 1.85; margin: 0; }
 
+/* ---------- Book pick cards ---------- */
+.book-cover {
+  aspect-ratio: 3 / 4;
+  background: var(--light);
+  overflow: hidden;
+}
+.book-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.card-header { padding: 1.7rem 1.9rem 1rem; }
+.card-eyebrow {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin: 0 0 0.6rem;
+  line-height: 1.5;
+}
+.card-period {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--orange);
+  background: rgba(232, 112, 58, 0.1);
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+.book-quote {
+  margin: 0.9rem 0 0.5rem;
+  padding: 0;
+  border: none;
+  font-size: 0.86rem;
+  font-style: italic;
+  color: var(--mid);
+  line-height: 1.85;
+}
+.book-recommender { font-size: 0.78rem; color: var(--mid); text-align: right; margin: 0; }
+
 /* ---------- Pricing box ---------- */
 .price-box {
-  background: var(--dark);
-  color: #fff;
+  position: relative;
+  background: var(--white);
+  border: 1px solid rgba(0,0,0,0.08);
   border-radius: 10px;
-  padding: 2.2rem;
+  padding: 2.4rem 2.2rem 2.2rem;
   text-align: center;
+  overflow: hidden;
 }
-.price-box .amount { font-family: var(--serif); font-size: 2.2rem; font-weight: 700; }
-.price-box .unit { font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+.price-box::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: var(--orange);
+}
+.price-box .amount { font-family: var(--serif); font-size: 2.2rem; font-weight: 700; color: var(--orange); }
+.price-box .unit { font-size: 0.85rem; color: var(--mid); }
 
 /* ---------- Numbered steps (genuine sequences only) ---------- */
 .step-list { list-style: none; margin: 0; padding: 0; counter-reset: step; }
@@ -341,63 +410,91 @@ section.alt { background: var(--white); }
 .avail-dot.full  { background: var(--mid); opacity: 0.35; }
 .avail-dot.open  { background: var(--green); }
 
-/* ---------- Update / social block ---------- */
-.update-block {
-  background: var(--light);
-  border-radius: 10px;
-  padding: 2rem;
+/* ---------- Media mentions ---------- */
+.media-list {
+  margin-top: 1.8rem;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+.media-entry {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
   gap: 1.6rem;
-  flex-wrap: wrap;
+  padding-bottom: 2.4rem;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
 }
-section.alt .update-block { background: var(--light); }
-.update-block .icon {
-  width: 46px; height: 46px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-  flex-shrink: 0;
+.media-entry:last-child { border-bottom: none; padding-bottom: 0; }
+.media-date {
+  font-family: var(--serif);
+  font-size: 0.85rem;
+  color: var(--orange);
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
-.update-block .text { flex: 1; min-width: 200px; }
-.update-block .text strong { font-family: var(--serif); font-size: 1.02rem; display: block; margin-bottom: 0.3rem; }
-.update-block .text span { font-size: 0.85rem; color: var(--mid); }
-
-/* ---------- Media mention ---------- */
-.media-item {
-  display: flex;
-  gap: 1.4rem;
-  align-items: center;
-  padding: 1.2rem 0;
+.media-body p { font-size: 0.92rem; color: var(--mid); line-height: 1.9; margin: 0 0 0.8rem; }
+.media-link {
+  display: inline-block;
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--dark);
+  text-decoration: none;
+  border-bottom: 1px solid var(--dark);
+  padding-bottom: 1px;
 }
+.media-link:hover { color: var(--orange); border-color: var(--orange); }
 .video-embed {
   position: relative;
   width: 100%;
   padding-top: 56.25%;
   border-radius: 8px;
   overflow: hidden;
-  margin-top: 1.5rem;
+  margin-top: 0.4rem;
 }
 .video-embed iframe {
   position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
 }
+@media (max-width: 600px) {
+  .media-entry { grid-template-columns: 1fr; gap: 0.5rem; }
+}
 
-/* ---------- Calendar embed ---------- */
-.calendar-embed { border-radius: 8px; overflow: hidden; margin-top: 1.5rem; border: 1px solid rgba(0,0,0,0.08); }
-.calendar-embed iframe { width: 100%; height: 480px; border: 0; display: block; }
+/* ---------- Instagram feed widget (SnapWidget) ---------- */
+.snapwidget-container {
+  margin-top: 1.8rem;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+}
+.snapwidget-container:empty {
+  min-height: 200px;
+  background: var(--white);
+  border: 1px dashed rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.snapwidget-container:empty::after {
+  content: "SnapWidgetの埋め込みコードをここに設置します";
+  font-size: 0.82rem;
+  color: var(--mid);
+}
 
 /* ---------- SNS row ---------- */
 .sns-row { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; margin-top: 1.6rem; }
 .sns-row a {
-  width: 42px; height: 42px;
+  width: 46px; height: 46px;
   border-radius: 50%;
   border: 1.5px solid rgba(0,0,0,0.15);
   display: flex; align-items: center; justify-content: center;
   text-decoration: none;
-  font-size: 0.78rem;
-  font-weight: 600;
+  color: var(--dark);
   transition: all 0.2s;
 }
+.sns-row a svg { width: 19px; height: 19px; }
 .sns-row a:hover { background: var(--dark); color: #fff; border-color: var(--dark); }
+.sns-row a.sns-ig:hover { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); border-color: transparent; }
+.sns-row a.sns-fb:hover { background: #1877f2; border-color: #1877f2; }
+.sns-row a.sns-note:hover { background: var(--green); border-color: var(--green); }
 
 /* ---------- CTA banner ---------- */
 .cta-banner {
@@ -446,4 +543,18 @@ footer.site-footer {
   .card-grid { grid-template-columns: 1fr; }
   section { padding: 3.5rem 0; }
   .info-list dt { flex-basis: 6.5rem; }
+}
+
+/* ---------- Scroll reveal (light) ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
 }
