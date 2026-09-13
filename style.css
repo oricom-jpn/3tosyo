@@ -460,10 +460,21 @@ section.alt { background: var(--white); }
 
 /* ---------- Instagram feed widget (SnapWidget) ---------- */
 .snapwidget-container {
+  position: relative;
   margin-top: 1.8rem;
   border-radius: 10px;
   overflow: hidden;
   text-align: center;
+  max-width: 765px;
+  margin-left: auto;
+  margin-right: auto;
+  aspect-ratio: 765 / 510;
+}
+.snapwidget-container iframe {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 .snapwidget-container:empty {
   min-height: 200px;
