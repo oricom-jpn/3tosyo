@@ -17,6 +17,34 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="stylesheet" href="style.css">
+<style>
+  .sticky-owner-cta{
+    position: fixed;
+    top: 68px;
+    left: 0;
+    right: 0;
+    z-index: 90;
+    display: flex;
+    justify-content: center;
+    padding: 0.7rem 1rem;
+    background: rgba(245, 242, 237, 0.94);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    transform: translateY(-130%);
+    opacity: 0;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    pointer-events: none;
+  }
+  .sticky-owner-cta.visible{
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .sticky-owner-cta a{
+    white-space: nowrap;
+  }
+</style>
 </head>
 <body>
 
@@ -32,6 +60,9 @@
     <button class="ham" id="hamBtn" aria-label="メニューを開く"><span></span><span></span><span></span></button>
   </div>
 </header>
+<div class="sticky-owner-cta" id="stickyOwnerCta">
+  <a class="btn-primary" href="https://forms.gle/ENxRDXgyXdLfLTGc6" target="_blank" rel="noopener">本棚オーナーに申し込む</a>
+</div>
 <nav class="mobile-menu" id="mobileMenu">
     <a href="index.html">ホーム</a>
     <a href="owner.html">一箱本棚オーナー制度</a>
@@ -52,7 +83,7 @@
           <h1>自分だけの本棚を、<br>商店街の中に<span class="accent">ひらく</span>。</h1>
           <p class="lead">一箱本棚オーナー制度は、さんとしょの中に自分専用の本棚を持てる仕組みです。読んでほしい本を並べるだけでなく、自己表現やちいさなビジネスの発信の場としても活用できます。</p>
           <div class="hero-actions">
-            <a class="btn-primary" href="https://forms.gle/ENxRDXgyXdLfLTGc6" target="_blank" rel="noopener">本棚オーナーに申し込む</a>
+            <a class="btn-primary" id="heroOwnerCta" href="https://forms.gle/ENxRDXgyXdLfLTGc6" target="_blank" rel="noopener">本棚オーナーに申し込む</a>
           </div>
         </div>
         <div class="hero-photo">
@@ -190,6 +221,24 @@
     });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // 「本棚オーナーに申し込む」ボタンの上部固定バー
+  const stickyOwnerCta = document.getElementById('stickyOwnerCta');
+  const heroOwnerCta = document.getElementById('heroOwnerCta');
+
+  if (stickyOwnerCta && heroOwnerCta) {
+    const ownerCtaObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          stickyOwnerCta.classList.remove('visible');
+        } else if (entry.boundingClientRect.top < 0) {
+          // 元のボタンが画面上部より上にスクロールされた時だけ表示
+          stickyOwnerCta.classList.add('visible');
+        }
+      });
+    }, { threshold: 0 });
+    ownerCtaObserver.observe(heroOwnerCta);
+  }
 </script>
 
 </body>
