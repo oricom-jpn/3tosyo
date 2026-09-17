@@ -107,6 +107,257 @@
     </div>
   </section>
 
+  <section id="calendar">
+    <div class="wrap">
+      <p class="section-label">Calendar</p>
+      <h2 class="section-title reveal">開館カレンダー</h2>
+
+      <style>
+        #santosho-calendar { max-width: 900px; margin: 24px auto 0; font-family: inherit; color: #333; }
+        .sc-nav { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
+        .sc-nav button { border: none; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.15); border-radius: 50%; width: 36px; height: 36px; font-size: 16px; cursor: pointer; color: #555; }
+        .sc-nav button:hover { background: #f2f2f2; }
+        .sc-current-month { font-size: 20px; font-weight: 700; min-width: 140px; text-align: center; }
+        .sc-legend { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+        .sc-legend span { display: inline-block; padding: 4px 14px; border-radius: 16px; font-size: 13px; font-weight: 700; color: #fff; }
+        .sc-legend .legend-open { background: #E8B923; color: #4a3400; }
+        .sc-legend .legend-event { background: #EE7B5A; }
+        .sc-legend .legend-shop { background: #234B75; }
+        .sc-grid { display: grid; grid-template-columns: repeat(7, 1fr); border-top: 1px solid #ddd; border-left: 1px solid #ddd; }
+        .sc-weekday { background: #fafafa; text-align: center; padding: 6px 0; font-size: 12px; font-weight: 700; color: #888; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; }
+        .sc-weekday.sun { color: #d9534f; }
+        .sc-weekday.sat { color: #337ab7; }
+        .sc-cell { min-height: 92px; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; padding: 4px 4px 6px; position: relative; background: #fff; }
+        .sc-cell.sc-otherMonth { background: #fbfbfb; }
+        .sc-cell.sc-otherMonth .sc-date { color: #ccc; }
+        .sc-date { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+        .sc-cell.sun .sc-date { color: #d9534f; }
+        .sc-cell.sat .sc-date { color: #337ab7; }
+        .sc-labels { display: flex; flex-direction: column; gap: 2px; }
+        .sc-label { border-radius: 4px; padding: 1px 4px; line-height: 1.3; font-weight: 700; color: #fff; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 10.5px; }
+        .sc-label.open { background: #E8B923; color: #4a3400; }
+        .sc-label.event { background: #EE7B5A; }
+        .sc-label.shop { background: #234B75; }
+        .sc-note { text-align: center; font-size: 13px; color: #888; margin-top: 16px; }
+        @media (max-width: 640px) {
+          .sc-cell { min-height: 70px; }
+          .sc-date { font-size: 12px; }
+          .sc-label { font-size: 9px; }
+        }
+      </style>
+
+      <div id="santosho-calendar">
+        <div class="sc-nav">
+          <button id="sc-prev" aria-label="前の月">◀</button>
+          <div class="sc-current-month" id="sc-current-month"></div>
+          <button id="sc-next" aria-label="次の月">▶</button>
+        </div>
+
+        <div class="sc-legend">
+          <span class="legend-open">開館時間</span>
+          <span class="legend-event">イベント</span>
+          <span class="legend-shop">チャレンジショップ</span>
+        </div>
+
+        <div class="sc-grid" id="sc-grid"></div>
+
+        <p class="sc-note">最新情報はSNS・ホームページでご確認ください</p>
+      </div>
+
+      <script>
+      (function () {
+        const GOOGLE_API_KEY = "AIzaSyDRaEh0BrRIsTLqSbT7o_OyOMxEllYHMyA";
+
+        const CALENDARS = {
+          open:  "15a702cc5bc60bac852145c487bc9e8f25b3dd0f586a45cec062f58ed1c7f871@group.calendar.google.com",
+          event: "123c69278050767afcbad4475cf46e0581a337ebec7ec297b86a8a9bc541ab90@group.calendar.google.com",
+          shop:  "2776e4f9c2479526dc4b23796f464d1858b762d8a0626cd4b23604c23a0924af@group.calendar.google.com"
+        };
+
+        const WEEKDAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+        let viewYear, viewMonth;
+        const today = new Date();
+        viewYear = today.getFullYear();
+        viewMonth = today.getMonth();
+
+        const gridEl = document.getElementById("sc-grid");
+        const monthLabelEl = document.getElementById("sc-current-month");
+
+        document.getElementById("sc-prev").addEventListener("click", () => {
+          viewMonth--;
+          if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+          renderMonth();
+        });
+        document.getElementById("sc-next").addEventListener("click", () => {
+          viewMonth++;
+          if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+          renderMonth();
+        });
+
+        function fmtLocalDate(d) {
+          const y = d.getFullYear();
+          const m = String(d.getMonth() + 1).padStart(2, "0");
+          const day = String(d.getDate()).padStart(2, "0");
+          return `${y}-${m}-${day}`;
+        }
+
+        function fmtTimeRange(startISO, endISO, isAllDay) {
+          if (isAllDay) return "";
+          const s = new Date(startISO);
+          const e = new Date(endISO);
+          const pad = (n) => String(n).padStart(2, "0");
+          const sT = `${s.getHours()}:${pad(s.getMinutes())}`.replace(":00", "");
+          const eT = `${e.getHours()}:${pad(e.getMinutes())}`.replace(":00", "");
+          return `${sT}-${eT}`;
+        }
+
+        async function fetchCalendarEvents(calendarId, timeMin, timeMax) {
+          const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events` +
+            `?key=${GOOGLE_API_KEY}&timeMin=${timeMin}&timeMax=${timeMax}` +
+            `&singleEvents=true&orderBy=startTime`;
+          try {
+            const res = await fetch(url);
+            if (!res.ok) {
+              console.error("カレンダー取得エラー:", calendarId, res.status);
+              return [];
+            }
+            const data = await res.json();
+            return data.items || [];
+          } catch (err) {
+            console.error("カレンダー取得失敗:", calendarId, err);
+            return [];
+          }
+        }
+
+        function buildDayMap(eventsByCategory, rangeStart, rangeEnd) {
+          const dayMap = {};
+          for (const category of Object.keys(eventsByCategory)) {
+            for (const ev of eventsByCategory[category]) {
+              const isAllDay = !!ev.start.date;
+              const startStr = ev.start.date || ev.start.dateTime;
+              const endStr = ev.end.date || ev.end.dateTime;
+
+              let startDate = new Date(startStr);
+              let endDate = new Date(endStr);
+              if (isAllDay) endDate.setDate(endDate.getDate() - 1);
+
+              let cursor = new Date(Math.max(startDate, rangeStart));
+              const limit = new Date(Math.min(endDate, rangeEnd));
+
+              while (cursor <= limit) {
+                const key = fmtLocalDate(cursor);
+                if (!dayMap[key]) dayMap[key] = { open: [], event: [], shop: [] };
+                const label = ev.summary || "";
+                const time = fmtTimeRange(startStr, endStr, isAllDay);
+                dayMap[key][category].push({ label, time });
+                cursor.setDate(cursor.getDate() + 1);
+              }
+            }
+          }
+          return dayMap;
+        }
+
+        async function renderMonth() {
+          monthLabelEl.textContent = `${viewYear}年 ${viewMonth + 1}月`;
+          gridEl.innerHTML = "";
+
+          WEEKDAYS.forEach((w, i) => {
+            const el = document.createElement("div");
+            el.className = "sc-weekday" + (i === 0 ? " sun" : i === 6 ? " sat" : "");
+            el.textContent = w;
+            gridEl.appendChild(el);
+          });
+
+          const firstDayOfMonth = new Date(viewYear, viewMonth, 1);
+          const lastDayOfMonth = new Date(viewYear, viewMonth + 1, 0);
+          const startWeekday = firstDayOfMonth.getDay();
+
+          const gridStart = new Date(viewYear, viewMonth, 1 - startWeekday);
+          const totalCells = Math.ceil((startWeekday + lastDayOfMonth.getDate()) / 7) * 7;
+          const gridEnd = new Date(gridStart);
+          gridEnd.setDate(gridStart.getDate() + totalCells - 1);
+
+          const timeMin = new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate()).toISOString();
+          const timeMax = new Date(gridEnd.getFullYear(), gridEnd.getMonth(), gridEnd.getDate() + 1).toISOString();
+
+          const [openEvents, eventEvents, shopEvents] = await Promise.all([
+            fetchCalendarEvents(CALENDARS.open, timeMin, timeMax),
+            fetchCalendarEvents(CALENDARS.event, timeMin, timeMax),
+            fetchCalendarEvents(CALENDARS.shop, timeMin, timeMax)
+          ]);
+
+          const dayMap = buildDayMap({ open: openEvents, event: eventEvents, shop: shopEvents }, gridStart, gridEnd);
+
+          for (let i = 0; i < totalCells; i++) {
+            const cellDate = new Date(gridStart);
+            cellDate.setDate(gridStart.getDate() + i);
+            const isOtherMonth = cellDate.getMonth() !== viewMonth;
+            const weekday = cellDate.getDay();
+
+            const cell = document.createElement("div");
+            cell.className = "sc-cell" + (isOtherMonth ? " sc-otherMonth" : "") + (weekday === 0 ? " sun" : weekday === 6 ? " sat" : "");
+
+            const dateEl = document.createElement("div");
+            dateEl.className = "sc-date";
+            dateEl.textContent = cellDate.getDate();
+            cell.appendChild(dateEl);
+
+            const key = fmtLocalDate(cellDate);
+            const dayData = dayMap[key];
+
+            if (dayData) {
+              const labelsWrap = document.createElement("div");
+              labelsWrap.className = "sc-labels";
+
+              dayData.open.forEach((item) => {
+                const el = document.createElement("div");
+                el.className = "sc-label open";
+                el.textContent = item.time || item.label;
+                fitLabel(el, item.time || item.label);
+                labelsWrap.appendChild(el);
+              });
+              dayData.event.forEach((item) => {
+                if (item.time) {
+                  const timeEl = document.createElement("div");
+                  timeEl.className = "sc-label open";
+                  timeEl.textContent = item.time;
+                  labelsWrap.appendChild(timeEl);
+                }
+                const el = document.createElement("div");
+                el.className = "sc-label event";
+                el.textContent = item.label;
+                fitLabel(el, item.label);
+                labelsWrap.appendChild(el);
+              });
+              dayData.shop.forEach((item) => {
+                const el = document.createElement("div");
+                el.className = "sc-label shop";
+                el.textContent = item.label;
+                fitLabel(el, item.label);
+                labelsWrap.appendChild(el);
+              });
+
+              cell.appendChild(labelsWrap);
+            }
+
+            gridEl.appendChild(cell);
+          }
+        }
+
+        function fitLabel(el, text) {
+          const len = (text || "").length;
+          if (len > 12) el.style.fontSize = "8px";
+          else if (len > 8) el.style.fontSize = "9px";
+          else el.style.fontSize = "10.5px";
+        }
+
+        renderMonth();
+      })();
+      </script>
+    </div>
+  </section>
+
   <section>
     <div class="wrap">
       <p class="section-label">Update</p>
