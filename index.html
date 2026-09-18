@@ -138,11 +138,17 @@
         .sc-label.open { background: #E8B923; color: #4a3400; }
         .sc-label.event { background: #EE7B5A; }
         .sc-label.shop { background: #234B75; }
-        .sc-note { text-align: center; font-size: 13px; color: #888; margin-top: 16px; }
+        .sc-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         @media (max-width: 640px) {
-          .sc-cell { min-height: 70px; }
-          .sc-date { font-size: 12px; }
-          .sc-label { font-size: 9px; }
+          #santosho-calendar { padding: 0 4px; }
+          .sc-grid { min-width: 560px; }
+          .sc-cell { min-height: 64px; padding: 2px 2px 4px; }
+          .sc-date { font-size: 11px; margin-bottom: 2px; }
+          .sc-weekday { font-size: 10px; padding: 4px 0; }
+          .sc-label { font-size: 8px; padding: 1px 3px; }
+          .sc-legend span { font-size: 11px; padding: 3px 10px; }
+          .sc-current-month { font-size: 17px; min-width: 110px; }
+          .sc-nav button { width: 30px; height: 30px; font-size: 14px; }
         }
       </style>
 
@@ -159,9 +165,9 @@
           <span class="legend-shop">チャレンジショップ</span>
         </div>
 
-        <div class="sc-grid" id="sc-grid"></div>
-
-        <p class="sc-note">最新情報はSNS・ホームページでご確認ください</p>
+        <div class="sc-scroll">
+          <div class="sc-grid" id="sc-grid"></div>
+        </div>
       </div>
 
       <script>
@@ -318,12 +324,6 @@
                 labelsWrap.appendChild(el);
               });
               dayData.event.forEach((item) => {
-                if (item.time) {
-                  const timeEl = document.createElement("div");
-                  timeEl.className = "sc-label open";
-                  timeEl.textContent = item.time;
-                  labelsWrap.appendChild(timeEl);
-                }
                 const el = document.createElement("div");
                 el.className = "sc-label event";
                 el.textContent = item.label;
