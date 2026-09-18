@@ -92,7 +92,7 @@
             <li><dt>登録料</dt><dd>300円（一箱本棚オーナーは無料）</dd></li>
             <li><dt>貸出期間</dt><dd>2週間</dd></li>
             <li><dt>貸出冊数</dt><dd>お一人につき2冊まで</dd></li>
-            <li><dt>開館日</dt><dd>不定期のため、<a href="https://www.instagram.com/3tosyo/" target="_blank" rel="noopener">インスタグラム</a>でご確認ください</dd></li>
+            <li><dt>開館日</dt><dd><a href="#calendar">開館日カレンダーをご覧ください</a></dd></li>
             <li><dt>住所</dt>
               <dd>
                 <a href="https://maps.app.goo.gl/mhg2My3oF3n4jtTj6" target="_blank" rel="noopener">兵庫県尼崎市建家町114-1（三和本通商店街7丁目）</a>
@@ -113,6 +113,7 @@
       <h2 class="section-title reveal">開館カレンダー</h2>
 
       <style>
+        #calendar { padding-bottom: 1.5rem !important; }
         #santosho-calendar { max-width: 900px; margin: 24px auto 0; font-family: inherit; color: #333; }
         .sc-nav { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
         .sc-nav button { border: none; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.15); border-radius: 50%; width: 36px; height: 36px; font-size: 16px; cursor: pointer; color: #555; }
@@ -123,32 +124,34 @@
         .sc-legend .legend-open { background: #E8B923; color: #4a3400; }
         .sc-legend .legend-event { background: #EE7B5A; }
         .sc-legend .legend-shop { background: #234B75; }
-        .sc-grid { display: grid; grid-template-columns: repeat(7, 1fr); border-top: 1px solid #ddd; border-left: 1px solid #ddd; }
+        .sc-grid { display: grid; grid-template-columns: repeat(7, 1fr); border-top: 1px solid #ddd; border-left: 1px solid #ddd; width: 100%; table-layout: fixed; }
         .sc-weekday { background: #fafafa; text-align: center; padding: 6px 0; font-size: 12px; font-weight: 700; color: #888; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; }
         .sc-weekday.sun { color: #d9534f; }
         .sc-weekday.sat { color: #337ab7; }
-        .sc-cell { min-height: 92px; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; padding: 4px 4px 6px; position: relative; background: #fff; }
+        .sc-cell { min-height: 92px; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; padding: 4px 4px 6px; position: relative; background: #fff; min-width: 0; overflow: hidden; }
         .sc-cell.sc-otherMonth { background: #fbfbfb; }
         .sc-cell.sc-otherMonth .sc-date { color: #ccc; }
         .sc-date { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
         .sc-cell.sun .sc-date { color: #d9534f; }
         .sc-cell.sat .sc-date { color: #337ab7; }
-        .sc-labels { display: flex; flex-direction: column; gap: 2px; }
-        .sc-label { border-radius: 4px; padding: 1px 4px; line-height: 1.3; font-weight: 700; color: #fff; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 10.5px; }
+        .sc-labels { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+        .sc-label { border-radius: 4px; padding: 1px 4px; line-height: 1.3; font-weight: 700; color: #fff; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 10.5px; min-width: 0; }
         .sc-label.open { background: #E8B923; color: #4a3400; }
         .sc-label.event { background: #EE7B5A; }
         .sc-label.shop { background: #234B75; }
-        .sc-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         @media (max-width: 640px) {
-          #santosho-calendar { padding: 0 4px; }
-          .sc-grid { min-width: 560px; }
-          .sc-cell { min-height: 64px; padding: 2px 2px 4px; }
-          .sc-date { font-size: 11px; margin-bottom: 2px; }
-          .sc-weekday { font-size: 10px; padding: 4px 0; }
-          .sc-label { font-size: 8px; padding: 1px 3px; }
-          .sc-legend span { font-size: 11px; padding: 3px 10px; }
-          .sc-current-month { font-size: 17px; min-width: 110px; }
-          .sc-nav button { width: 30px; height: 30px; font-size: 14px; }
+          #santosho-calendar { padding: 0; margin-top: 16px; }
+          .sc-grid { border-left: none; }
+          .sc-cell { min-height: 52px; padding: 1px 1px 3px; border-left: 1px solid #ddd; }
+          .sc-date { font-size: 9px; margin-bottom: 1px; }
+          .sc-weekday { font-size: 9px; padding: 3px 0; }
+          .sc-label { font-size: 6px; padding: 0px 1px; border-radius: 2px; line-height: 1.25; }
+          .sc-labels { gap: 1px; }
+          .sc-legend { gap: 6px; margin-bottom: 14px; }
+          .sc-legend span { font-size: 10px; padding: 3px 9px; }
+          .sc-current-month { font-size: 16px; min-width: 100px; }
+          .sc-nav { gap: 12px; margin-bottom: 14px; }
+          .sc-nav button { width: 28px; height: 28px; font-size: 13px; }
         }
       </style>
 
@@ -165,9 +168,7 @@
           <span class="legend-shop">チャレンジショップ</span>
         </div>
 
-        <div class="sc-scroll">
-          <div class="sc-grid" id="sc-grid"></div>
-        </div>
+        <div class="sc-grid" id="sc-grid"></div>
       </div>
 
       <script>
@@ -213,8 +214,8 @@
           const s = new Date(startISO);
           const e = new Date(endISO);
           const pad = (n) => String(n).padStart(2, "0");
-          const sT = `${s.getHours()}:${pad(s.getMinutes())}`.replace(":00", "");
-          const eT = `${e.getHours()}:${pad(e.getMinutes())}`.replace(":00", "");
+          const sT = `${pad(s.getHours())}:${pad(s.getMinutes())}`;
+          const eT = `${pad(e.getHours())}:${pad(e.getMinutes())}`;
           return `${sT}-${eT}`;
         }
 
