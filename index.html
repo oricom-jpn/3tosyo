@@ -19,8 +19,99 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="stylesheet" href="style.css">
+<style>
+  #loadingScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loadingScreen.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  #loadingScreen .logo-container {
+    width: 100%;
+    max-width: 320px;
+    padding: 20px;
+  }
+  #loadingScreen .draw-text,
+  #loadingScreen .draw-line {
+    stroke: #231815;
+    fill: transparent;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: scDraw 1.8s ease-in-out forwards, scFill 0.5s ease forwards;
+  }
+  #loadingScreen .title-text {
+    font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+    font-weight: 700;
+    font-size: 44px;
+    letter-spacing: 12px;
+    stroke-width: 2px;
+    animation-delay: 0s, 2.5s;
+  }
+  #loadingScreen .book-line1 { stroke-width: 4px; stroke-linecap: round; animation-delay: 0.6s, 99s; }
+  #loadingScreen .book-line2 { stroke-width: 4px; stroke-linecap: round; animation-delay: 0.9s, 99s; }
+  #loadingScreen .book-line3 { stroke-width: 4px; stroke-linecap: round; animation-delay: 1.2s, 99s; }
+  #loadingScreen .sub-text {
+    font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    stroke-width: 1px;
+    animation-delay: 1.6s, 2.8s;
+  }
+  @keyframes scDraw { to { stroke-dashoffset: 0; } }
+  @keyframes scFill { to { fill: #231815; } }
+  @media (prefers-reduced-motion: reduce) {
+    #loadingScreen .draw-text,
+    #loadingScreen .draw-line {
+      animation: none;
+      stroke-dashoffset: 0;
+      fill: #231815;
+    }
+  }
+</style>
 </head>
 <body>
+
+<div id="loadingScreen" aria-hidden="true">
+  <div class="logo-container">
+    <svg viewBox="0 0 400 240" width="100%" height="auto" fill="none">
+      <text x="206" y="65" text-anchor="middle" class="draw-text title-text">さんとしょ</text>
+      <path class="draw-line book-line1" d="M 30 100 Q 115 70 200 120 Q 285 70 370 100" />
+      <path class="draw-line book-line2" d="M 30 115 Q 115 85 200 135 Q 285 85 370 115" />
+      <path class="draw-line book-line3" d="M 30 130 Q 115 100 200 150 Q 285 100 370 130" />
+      <text x="201" y="195" text-anchor="middle" class="draw-text sub-text">さんわにあるみんなのとしょかん</text>
+    </svg>
+  </div>
+</div>
+<script>
+(function () {
+  var loadingScreen = document.getElementById('loadingScreen');
+  if (!loadingScreen) return;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var minTime = reduceMotion ? 0 : 3400; // ロゴアニメーションの再生時間(ms)
+  var start = Date.now();
+  function hideLoading() {
+    var wait = Math.max(0, minTime - (Date.now() - start));
+    setTimeout(function () {
+      loadingScreen.classList.add('hide');
+      setTimeout(function () { loadingScreen.remove(); }, 700);
+    }, wait);
+  }
+  if (document.readyState === 'complete') {
+    hideLoading();
+  } else {
+    window.addEventListener('load', hideLoading);
+  }
+})();
+</script>
 
 <header class="site-nav">
   <div class="nav-inner">
