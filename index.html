@@ -2,6 +2,18 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<script>
+  // ローディング画面を一定時間内の再訪では表示しないようにする早期チェック
+  (function () {
+    try {
+      var last = localStorage.getItem('santoshoLoadingSeen');
+      var HOURS = 24;
+      if (last && (Date.now() - parseInt(last, 10)) < HOURS * 60 * 60 * 1000) {
+        document.documentElement.classList.add('skip-loading');
+      }
+    } catch (e) {}
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>さんとしょ ～さんわにあるみんなのとしょかん～</title>
 <meta name="description" content="尼崎市・三和本通商店街にあるシェア型図書館「さんとしょ」の公式サイト。貸出のご案内、一箱本棚オーナー制度、最新情報をお届けします。">
@@ -76,6 +88,9 @@
       fill: #231815;
     }
   }
+  html.skip-loading #loadingScreen {
+    display: none;
+  }
 </style>
 </head>
 <body>
@@ -95,12 +110,19 @@
 (function () {
   var loadingScreen = document.getElementById('loadingScreen');
   if (!loadingScreen) return;
+
+  if (document.documentElement.classList.contains('skip-loading')) {
+    loadingScreen.remove();
+    return;
+  }
+
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var minTime = reduceMotion ? 0 : 3400; // ロゴアニメーションの再生時間(ms)
   var start = Date.now();
   function hideLoading() {
     var wait = Math.max(0, minTime - (Date.now() - start));
     setTimeout(function () {
+      try { localStorage.setItem('santoshoLoadingSeen', Date.now().toString()); } catch (e) {}
       loadingScreen.classList.add('hide');
       setTimeout(function () { loadingScreen.remove(); }, 700);
     }, wait);
