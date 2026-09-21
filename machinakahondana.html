@@ -17,6 +17,12 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="stylesheet" href="style.css">
+<style>
+  .location-grid { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 700px) {
+    .location-grid { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
 
@@ -68,10 +74,13 @@
     <div class="wrap">
       <p class="section-label">How to use</p>
       <h2 class="section-title reveal">使い方</h2>
-      <ol class="step-list reveal" style="max-width:640px;">
-        <li>本は自由に持ち帰ってOK</li>
-        <li>自分には要らなくなった本は、メッセージを添えて置いて帰ってOK</li>
-      </ol>
+      <div class="two-col reveal">
+        <ol class="step-list reveal">
+          <li>本は自由に持ち帰ってOK</li>
+          <li>自分には要らなくなった本は、メッセージを添えて置いて帰ってOK</li>
+        </ol>
+        <img src="images/machihon-shelf.jpg" alt="まちなか本棚の実際の様子" style="width:100%; border-radius:10px;">
+      </div>
     </div>
   </section>
 
@@ -79,7 +88,7 @@
     <div class="wrap">
       <p class="section-label">Location</p>
       <h2 class="section-title reveal">設置場所</h2>
-      <div class="card-grid reveal" style="grid-template-columns: repeat(2, 1fr);">
+      <div class="card-grid location-grid reveal">
         <div class="card">
           <div class="card-top" style="background:var(--orange);"></div>
           <div style="padding:1.5rem 1.5rem 0;">
