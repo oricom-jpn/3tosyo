@@ -63,20 +63,19 @@ header.site-nav {
 .nav-logo {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: 10px;
   text-decoration: none;
   color: var(--dark);
-  font-family: var(--serif);
-  font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: 0.02em;
 }
-.nav-logo .tag {
-  font-family: var(--sans);
-  font-size: 0.62rem;
-  font-weight: 500;
-  color: var(--mid);
-  letter-spacing: 0.02em;
+.nav-logo-main {
+  height: 26px;
+  width: auto;
+  display: block;
+}
+.nav-logo-sub {
+  height: 9px;
+  width: auto;
+  display: block;
 }
 
 .nav-links {
